@@ -42,15 +42,22 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+app.post("/urls/:id", (req, res) => {
+  const shortURL = req.params.id;
+  const newURL = req.body.newURL
+  urlDatabase[shortURL] = newURL;
+  res.redirect(`/urls/`);       
+});
+
 app.post("/urls", (req, res) => {
   const randomString = generateRandomString()
   urlDatabase[randomString] = req.body.longURL;
+  console.log("We are here now")
   res.redirect(`/urls/${randomString}`);       
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   delete urlDatabase[req.params.shortURL];
-  console.log(urlDatabase); 
   res.redirect(`/urls/`);       
 });
 
