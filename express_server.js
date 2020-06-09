@@ -1,8 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const app = express();
-
 const PORT = 8080; // default port 8080
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,8 +45,13 @@ app.get("/hello", (req, res) => {
 app.post("/urls", (req, res) => {
   const randomString = generateRandomString()
   urlDatabase[randomString] = req.body.longURL;
-  console.log(urlDatabase);
   res.redirect(`/urls/${randomString}`);       
+});
+
+app.post("/urls/:shortURL/delete", (req, res) => {
+  delete urlDatabase[req.params.shortURL];
+  console.log(urlDatabase); 
+  res.redirect(`/urls/`);       
 });
 
 app.listen(PORT, () => {
