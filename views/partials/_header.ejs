@@ -15,15 +15,16 @@
     <div class="d-flex justify-content-end">
       <% if(userId){ %>
       <form class="form-inline" action="/logout" method="POST">
-        <p class="h6" style="margin-bottom: 10px; margin-top:10px; margin-right: 10px">Logged in as <%=users[userId].email%>!</p>
+        <p class="h6" style="margin-bottom: 10px; margin-top:10px; margin-right: 10px">Logged in as
+          <%=users[userId].email%>!</p>
         <button type="submit" class="btn btn-outline-dark">Logout</button>
-    <% } else{ %>
-      <form class="form-inline" action="/register" method="GET">
-        <button type="submit" class="btn btn-outline-dark" style="margin-right: 10px">Register</button>
+        <% } else{ %>
+        <form class="form-inline" action="/register" method="GET">
+          <button type="submit" class="btn btn-outline-dark" style="margin-right: 10px">Register</button>
         </form>
-      <form class="form-inline" action="/login" method="GET">
-        <button type="submit" class="btn btn-outline-dark">Login</button>
-    <% } %>
+        <form class="form-inline" action="/login" method="GET">
+          <button type="submit" class="btn btn-outline-dark">Login</button>
+          <% } %>
     </div>
     </form>
   </nav>
