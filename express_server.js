@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 //works
 app.get("/urls", (req, res) => {
   let templateVars = {
-    username: req.cookies["userId"],
+    userId: req.cookies["userId"],
     urls: urlDatabase,
     users,
   };
@@ -31,7 +31,7 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   let templateVars = {
-    username: req.cookies["userId"],
+    userId: req.cookies["userId"],
     users,
   }
   res.render("urls_new", templateVars);
@@ -40,7 +40,7 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   const longUrl = urlDatabase[req.params.shortURL];
   let templateVars = {
-    username: req.cookies["userId"],
+    userId: req.cookies["userId"],
     shortURL: req.params.shortURL,
     longURL: longUrl,
     users,
@@ -63,7 +63,7 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/register", (req, res) => {
   let templateVars = {
-    username: req.cookies["userId"],
+    userId: req.cookies["userId"],
     users,
   }
   res.render("register", templateVars);
@@ -71,7 +71,7 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   let templateVars = {
-    username: req.cookies["userId"],
+    userId: req.cookies["userId"],
     users,
   }
   res.render("login", templateVars);
@@ -101,21 +101,22 @@ app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const user = findUserByEmail(email);
-  if (!user) {
+  if (email === "" || password === "") {
+    res.status(403).send("user or password were empty!");
+  } else if (!user) {
     users[userId] = {
-      userId,
+      id : userId,
       email,
       password,
     }
+    //setting the cookie in the users browser
+    res.cookie("userId", userId);
+    res.redirect("/urls");
   } else {
     res.status(403).send("user is already registered!");
   }
 
-  //setting the cookie in the users browser
-  res.cookie("userId", userId);
-  res.redirect("/urls");
 });
-
 
 app.post("/login", (req, res) => {
   //extract info from form with req.body from the login page!
@@ -125,13 +126,13 @@ app.post("/login", (req, res) => {
   const userId = authenticateUser(email, password);
   if (userId) {
     //set cookie with user id
+    res.cookie("userId", userId);
     //redirect to /urls
+    res.redirect("/urls");
   } else {
     //user is not authenticated => error msg
+    res.status(403).send("password or email are incorrect!");
   }
-  //old:
-  // res.cookie('user_id', req.body.user_id);
-  // res.redirect("/urls/");
 });
 
 app.post("/logout", (req, res) => {
@@ -149,16 +150,16 @@ function generateRandomString() {
 }
 function findUserByEmail(email) {
   for (let user in users) {
-    if (user.email === email) {
-      return true;
+    if (users[user].email === email) {
+      return users[user].id;
     }
   } return false;
 };
 
 const authenticateUser = (email, password) => {
   const user = findUserByEmail(email);
-  if (user && user.password === password) {
-    return user.id;
+  if (user && users[user].password === password) {
+    return users[user].id;
   }
   return false;
 }
