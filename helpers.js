@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 function getUserByEmail(email, users) {
   for (let user in users) {
     if (users[user].email === email) {
@@ -10,7 +12,7 @@ function generateRandomString() {
   return r;
 }
 
-const authenticateUser = (email, passwordEntered) => {
+const authenticateUser = (email, passwordEntered, users) => {
   const user = getUserByEmail(email, users);
   if (user) {
     const hashedPassword = users[user].hashedPassword;

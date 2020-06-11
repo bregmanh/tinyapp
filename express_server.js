@@ -168,7 +168,7 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const userId = authenticateUser(email, password);
+  const userId = authenticateUser(email, password, users);
   if (userId) {
     //set cookie with user id
     req.session['userId'] = userId;
