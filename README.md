@@ -8,15 +8,9 @@ First time users can register or returning users can simply login to create new 
 
 ## Final Product
 
-<<<<<<< HEAD
-![Create Account Page](/docs/register-page.png)
-![Creating a Short URL Page](/docs/urls-new-page.png)
-![Viewing Created URLS Page](/docs/urls-page.png)
-=======
 ![Create Account Page](https://github.com/bregmanh/tinyapp/blob/master/docs/register-page.png?raw=true)
 ![Creating a Short URL Page](https://github.com/bregmanh/tinyapp/blob/master/docs/urls-new-page.png?raw=true)
 ![Viewing Created URLS Page](https://github.com/bregmanh/tinyapp/blob/master/docs/urls-page.png?raw=true)
->>>>>>> eedb678c8752e32c3de340306799765bb40868ed
 
 
 ## Dependencies
