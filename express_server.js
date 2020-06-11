@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 8080; // default port 8080
 app.set("view engine", "ejs");
@@ -13,7 +14,7 @@ let users = {};
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
-//works
+
 app.get("/urls", (req, res) => {
   const userId = req.cookies["userId"];
   if (!userId) {
@@ -100,7 +101,6 @@ app.post("/urls", (req, res) => {
     longURL: req.body.longURL,
     userID: req.cookies["userId"],
   }
-  console.log(urlDatabase);
   res.redirect(`/urls/${randomString}`);
 });
 
@@ -117,6 +117,7 @@ app.post("/register", (req, res) => {
   const userId = generateRandomString();
   const email = req.body.email;
   const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10);
   const user = findUserByEmail(email);
   if (email === "" || password === "") {
     res.status(403).send("user or password were empty!");
@@ -124,7 +125,7 @@ app.post("/register", (req, res) => {
     users[userId] = {
       id: userId,
       email,
-      password,
+      hashedPassword,
     }
     //setting the cookie in the users browser
     res.cookie("userId", userId);
@@ -172,11 +173,15 @@ function findUserByEmail(email) {
   } return false;
 };
 
-const authenticateUser = (email, password) => {
+const authenticateUser = (email, passwordEntered) => {
   const user = findUserByEmail(email);
-  if (user && users[user].password === password) {
-    return users[user].id;
+  if(user){
+    const hashedPassword = users[user].hashedPassword;
+    if (user && bcrypt.compareSync(passwordEntered, hashedPassword)) {
+      return users[user].id;
+    }
   }
+ 
   return false;
 }
 
