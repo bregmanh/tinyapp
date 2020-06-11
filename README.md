@@ -9,7 +9,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-![Create Account Page](/img/register.png)
+![Create Account Page](https://github.com/bregmanh/tinyapp/blob/master/docs/register-page.png?raw=true)
 ![Creating a Short URL Page](/img/new.png)
 ![Viewing Created URLS Page](/img/urls.png)
 
